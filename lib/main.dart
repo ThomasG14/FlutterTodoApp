@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_berserk/domain/todo_entity.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,17 +13,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Todo App test'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -30,36 +30,58 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // Liste des todo items
 
-  void _incrementCounter() {
+  late List<TodoEntity> _todos = [
+    const HighTodoEntity(title: 'Apprendre Flutter', subtitle: 'Les base et concept'),
+    const MediumTodoEntity(title: 'Apprendre Flutter', subtitle: 'Créer une app Todo'),
+    const LowTodoEntity(title: 'Apprendre Flutter', subtitle: 'devenir plus fort que Yann'),
+  ];
+
+
+  // Fonction pour ajouter un todo
+  void _addTodo() {
     setState(() {
-      _counter++;
+      _todos.add(
+        const LowTodoEntity(title: 'nouvelle tache', subtitle: 'nouvelle tache')
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
+
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            // Afficher la liste des todos
+            Expanded(
+              child: ListView.builder(
+                itemCount: _todos.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_todos[index].title),
+                    subtitle: Text(_todos[index].subtitle),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
+
+
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addTodo,
+        tooltip: 'Ajouter une tâche',
         child: const Icon(Icons.add),
       ),
     );
